@@ -1,45 +1,38 @@
 import React, { useState } from "react";
 import List from "./List";
+import InputArea from "./InputArea";
 
 
 
 function App() {
   const [liItems, setLiItems] = useState([]);
-  const [value, setValue] = useState("");
-  function handleChange(e) {
-    const value = e.target.value;
-    setValue(value);
+  
+  
+  function handleDelete(index) {
+    setLiItems((prev) => {
+      return prev.filter((value, i) => {
+        return index !== i
+      })
+    });
   }
-  function handleClick(e) {
-    e.preventDefault();
+  function handleClick(value) {
     if(value.trim() != "") {
-      const prevValue = value;
-      setLiItems(prev => {
+        setLiItems(prev => {
         return (
-          [...prev, prevValue]
+            [...prev, value]
         );
-      });
-      setValue("");
+        });
     }    
-  }
-
+}
   return (
     <div className="container">
       <div className="heading">
         <h1>To-Do List</h1>
       </div>
-      <div className="form">
-      <form onSubmit={handleClick} >
-        <input type="text" onChange={handleChange} value={value}/>
-        <button type="submit">
-          <span>Add</span>
-        </button>
-      </form>
-        
-      </div>
+      <InputArea handleClick={handleClick} />
       <div>
         <ul>
-          {liItems.map(item => <List key={item} text={item}/>)}
+          {liItems.map((item, index) => <List key={index} id={index} text={item} handleDelete={handleDelete}/>)}
         </ul>
       </div>
     </div>
